@@ -1,0 +1,15 @@
+[project]
+name = "Programier-bung2_Aufgabe2-5"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "J4nickH", email = "ha1220@mci4me.at"},
+]
+dependencies = []
+requires-python = ">=3.9"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
