@@ -40,10 +40,10 @@ birthdate_value = read_data.get_person_data_ba_name(data, st.session_state.curre
 # Bild und Personendaten nebeneinander anzeigen
 bild, personendaten = st.columns([1,2], gap="small")
 with bild:
-    st.header("Profilbild")
+    st.header("Personendaten")
     st.image(image)
 with personendaten:
-    st.header("Personendaten")
+    st.markdown("<br><br>", unsafe_allow_html=True) # Leerer Platzhalter, um den Abstand zu vergrößern
     st.write("Vorname: ", read_data.get_person_data_ba_name(data, st.session_state.current_user)["firstname"])
     st.write("Nachname: ", read_data.get_person_data_ba_name(data, st.session_state.current_user)["lastname"])
     st.markdown(f"<span style='color:white; font-size:16px;'>id: {id_value}</span>", unsafe_allow_html=True)
