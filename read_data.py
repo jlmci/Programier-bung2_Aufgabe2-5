@@ -17,13 +17,15 @@ def create_name_list():
     return namen_liste
 
 def get_person_data_ba_name(person_data, name_to_find):
-    name_to_find = name_to_find.strip()
-    name_to_find.split(", ")
-    
+    name_to_find = name_to_find.split(" ")
+    #print(name_to_find)
+   # print(name_to_find)
     for i in person_data:
         # Check if the name_to_find is in the firstname or lastname of the person
         if name_to_find[0] in i["firstname"] and name_to_find[1] in i["lastname"]:
+            #print(i["firstname"], i["lastname"])
             return i
+        
 
     return None
 
@@ -34,7 +36,8 @@ if __name__ == "__main__":
     # This is the main function that will be executed when the script is run
     person_data = load_person_data()
     person_name_list = create_name_list()
-    print("Person data loaded successfully.")
-    print(person_data)
-    print(person_name_list)
-    print("Picture path: ", picture_path(person_data))
+    #print(person_data)
+    #a = person_name_list
+    #print(a.split(", "))
+    #print("Picture path: ", picture_path(person_data))
+    print(get_person_data_ba_name(person_data, "Julian"))
