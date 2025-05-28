@@ -52,20 +52,73 @@ with personendaten:
     st.write("Geschlecht: ", read_data.get_person_data_ba_name(data, st.session_state.current_user)["gender"])
 
 
+
+
+
+
+
+
+
+
+
 st.write("## EKG-Daten")
+  # Standardwert für die maximale Herzfrequenz
+if "max_hr_input_user" not in st.session_state:
+    st.session_state.max_hr_input_user = 180
+
+user_input_str = st.text_input(
+    label="Maximale Herzfrequenz (bpm):",
+    value=str(st.session_state.max_hr_input_user),
+    key="max_hr_input_widget"
+)
+
+try:
+    new_hr_value = int(user_input_str)
+    if new_hr_value != st.session_state.max_hr_input_user:
+        st.session_state.max_hr_input_user = new_hr_value
+except ValueError:
+    st.error("Bitte gib eine gültige Zahl für die Herzfrequenz ein.")
+#st.write(st.session_state.max_hr_input_user)
+
+
+
+
+
+
+
+
+
 data_plot = read_pandas.read_my_csv()   #lese die EKG-Daten ein
-fig = read_pandas.make_plot(data_plot)
+zone1, zone2, zone3, zone4, zone5, df, zone_boundries = read_pandas.calculate_HR_zone(data_plot, float(st.session_state.max_hr_input_user))
+fig = read_pandas.make_plot(df)  # Erstelle den Plot
+
 #st.write(fig)  # Erstelle den Plot
 st.plotly_chart(fig)  # Zeige den Plot in der Streamlit-App an
 
 
 
-Leistung_mean, leer = st.columns([1,1], gap="small")
+
+
+
+
+
+
+
+
+
+
+Leistung_mean, hr_zones = st.columns([1,1], gap="small")
 with Leistung_mean:
     st.markdown("<div style='padding-top: 23px; font-size: 32px;'>Leistung</div>", unsafe_allow_html=True)
     st.write("Mittelwert: ", read_pandas.mittelwerte(data_plot)[0])
     st.write("Maximalwert: ", read_pandas.mittelwerte(data_plot)[1])
 
-    
+with hr_zones:
+    st.markdown("<div style='padding-top: 23px; font-size: 32px;'>Herzfrequenzzonen</div>", unsafe_allow_html=True)
+    st.write("Mittelwert von Zone 1: ", zone1["HeartRate"].mean())
+    st.write("Mittelwert von Zone 2: ", zone2["HeartRate"].mean())
+    st.write("Mittelwert von Zone 3: ", zone3["HeartRate"].mean())
+    st.write("Mittelwert von Zone 4: ", zone4["HeartRate"].mean())
+    st.write("Mittelwert von Zone 5: ", zone5["HeartRate"].mean())    
 # Hier können Sie die EKG-Daten anzeigen, die zu der ausgewählten Person gehören
 
