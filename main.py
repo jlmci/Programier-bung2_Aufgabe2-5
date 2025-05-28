@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image #paket für Bilder
 
 import read_data
+import read_pandas # Importiere die Funktionen aus read_data.py
 # Importiere die Funktionen aus read_data.py
 # Lade die Personendaten und die Namensliste
 data = read_data.load_person_data()
@@ -52,5 +53,19 @@ with personendaten:
 
 
 st.write("## EKG-Daten")
+data_plot = read_pandas.read_my_csv()   #lese die EKG-Daten ein
+fig = read_pandas.make_plot(data_plot)
+#st.write(fig)  # Erstelle den Plot
+st.plotly_chart(fig)  # Zeige den Plot in der Streamlit-App an
+
+
+
+Leistung_mean, leer = st.columns([1,1], gap="small")
+with Leistung_mean:
+    st.markdown("<div style='padding-top: 23px; font-size: 32px;'>Leistung</div>", unsafe_allow_html=True)
+    st.write("Mittelwert: ", read_pandas.mittelwerte(data_plot)[0])
+    st.write("Maximalwert: ", read_pandas.mittelwerte(data_plot)[1])
+
+    
 # Hier können Sie die EKG-Daten anzeigen, die zu der ausgewählten Person gehören
 
