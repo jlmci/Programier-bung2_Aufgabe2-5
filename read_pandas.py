@@ -11,6 +11,7 @@ import numpy as np
 import plotly.express as px
 import plotly.io as pio
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 pio.renderers.default = 'browser'  # Setzt den Standard-Renderer auf den Browser
 
 def read_my_csv():
@@ -70,73 +71,96 @@ def calculate_HR_zone(df, max_Hr_input=180):
 
 
 def make_plot(df):
-    fig = go.Figure()
+  
+  #fig = go.Figure()
+  fig = make_subplots(specs=[[{"secondary_y": True}]], shared_xaxes=True)
+  # Define a color palette for the zones (for the markers)
+  zone_colors = {
+      'Zone 1': '#ADD8E6', # Light blue
+      'Zone 2': '#87CEEB', # Sky blue
+      'Zone 3': '#FFD700', # Gold
+      'Zone 4': '#FFA500', # Orange
+      'Zone 5': '#FF4500', # Orange-red
+      'Unbekannt': '#CCCCCC' # Gray for unknown zones
+  }
 
-    # Define a color palette for the zones (for the markers)
-    zone_colors = {
-        'Zone 1': '#ADD8E6', # Light blue
-        'Zone 2': '#87CEEB', # Sky blue
-        'Zone 3': '#FFD700', # Gold
-        'Zone 4': '#FFA500', # Orange
-        'Zone 5': '#FF4500', # Orange-red
-        'Unbekannt': '#CCCCCC' # Gray for unknown zones
-    }
+  # Ensure the DataFrame has the 'HeartZone' column
+  if 'HeartZone' not in df.columns:
+      print("Error: 'HeartZone' column not found. Please calculate zones first.")
+      # Fallback: Plot a single line if no zones are available
+      fig.add_trace(go.Scatter(x=df['Time'], y=df['HeartRate'], mode='lines', name='Heart Rate', line=dict(color='blue')),secondary_y = False)
+      if 'PowerOriginal' in df.columns:
+          fig.add_trace(go.Scatter(x=df['Time'], y=df['PowerOriginal'], mode='lines', name='Leistung (Watt)', line=dict(color='gray')), secondary_y=True)
+      return fig
 
-    # Ensure the DataFrame has the 'HeartZone' column
-    if 'HeartZone' not in df.columns:
-        print("Error: 'HeartZone' column not found. Please calculate zones first.")
-        # Fallback: Plot a single line if no zones are available
-        fig.add_trace(go.Scatter(x=df['Time'], y=[df['HeartRate'],df['PowerCurve']], mode='lines', name='Heart Rate', line=dict(color='blue')))
-        return fig
+  # Create a list of colors for each data point based on its HeartZone
+  point_colors = [zone_colors.get(zone, '#000000') for zone in df['HeartZone']]
 
-    # Create a list of colors for each data point based on its HeartZone
-    point_colors = [zone_colors.get(zone, '#000000') for zone in df['HeartZone']]
+  # Plot the entire heart rate curve with colored markers
+  fig.add_trace(go.Scatter(
+      x=df['Time'],
+      y=df['HeartRate'],
+      mode='lines+markers', # Show both line and markers
+      name='Herzfrequenz', # Name for the main line (can be hidden from legend)
+      line=dict(color='white', width=2), # A continuous line, e.g., white
+      marker=dict(
+          color=point_colors, # Color each marker based on its zone
+          size=3, # Size of the markers
+          line=dict(width=0) # No border around markers
+      ),
+      showlegend = False # Hide this trace from the legend as we'll create custom ones
+      
+  ), secondary_y=False # Primary y-axis for heart rate
+  )
 
-    # Plot the entire heart rate curve with colored markers
-    fig.add_trace(go.Scatter(
-        x=df['Time'],
-        y=df['HeartRate'],
-        mode='lines+markers', # Show both line and markers
-        name='Herzfrequenz', # Name for the main line (can be hidden from legend)
-        line=dict(color='white', width=2), # A continuous line, e.g., white
-        marker=dict(
-            color=point_colors, # Color each marker based on its zone
-            size=3, # Size of the markers
-            line=dict(width=0) # No border around markers
-        ),
-        showlegend=False # Hide this trace from the legend as we'll create custom ones
-    ))
+    # Plottet die Leistungskurve auf der sekundären Y-Achse
+  if 'PowerOriginal' in df.columns: # Stellt sicher, dass die Spalte PowerOriginal existiert
+      fig.add_trace(go.Scatter(
+          x=df['Time'],
+          y=df['PowerOriginal'],
+          mode='lines',
+          name='Leistung (Watt)', # Name für die Leistungskurve in der Legende
+          line=dict(color='gray', width=2), # Graue Farbe für die Leistungskurve
+          showlegend=True # Zeigt diesen Trace in der Legende an
+      ), secondary_y=True) # Zuweisung zur sekundären Y-Achse
 
-    # Add dummy traces for the legend to show zone colors
-    sorted_zones = [
-        'Zone 1', 'Zone 2', 'Zone 3',
-        'Zone 4', 'Zone 5', 'Unbekannt'
-    ]
-    for zone_name in sorted_zones:
-        if zone_name in zone_colors: # Only add if the zone has a defined color
-            fig.add_trace(go.Scatter(
-                x=[None], # Dummy x-coordinate
-                y=[None], # Dummy y-coordinate
-                mode='markers',
-                marker=dict(size=10, color=zone_colors[zone_name], symbol='circle'),
-                name=zone_name,
-                showlegend=True
-            ))
 
-    # Layout of the plot
-    fig.update_layout(
-        title='Herzfrequenzkurve mit zonenfarbigen Datenpunkten',
-        xaxis_title='Zeit (Sekunden)',
-        yaxis_title='Herzfrequenz (bpm)',
-        hovermode='x unified', # Show information for all traces at an X-point
-        legend_title='Herzfrequenzzonen',
-        height=500,
-        plot_bgcolor='black', # Plot background black
-        paper_bgcolor='black', # Entire diagram background black
-        font=dict(color='white') # Font color white
-    )
+  # Add dummy traces for the legend to show zone colors
+  sorted_zones = [
+      'Zone 1', 'Zone 2', 'Zone 3',
+      'Zone 4', 'Zone 5', 'Unbekannt'
+  ]
+  for zone_name in sorted_zones:
+      if zone_name in zone_colors: # Only add if the zone has a defined color
+          fig.add_trace(go.Scatter(
+              x=[None], # Dummy x-coordinate
+              y=[None], # Dummy y-coordinate
+              mode='markers',
+              marker=dict(size=10, color=zone_colors[zone_name], symbol='circle'),
+              name=zone_name,
+              showlegend=True
+          ))
 
-    return fig
+  # Layout of the plot
+  fig.update_layout(
+      title='Herzfrequenzkurve mit zonenfarbigen Datenpunkten',
+      xaxis_title='Zeit (Sekunden)',
+      yaxis_title='Herzfrequenz (bpm)',
+      hovermode='x unified', # Show information for all traces at an X-point
+      legend_title='Herzfrequenzzonen',
+      height=500,
+      plot_bgcolor='black', # Plot background black
+      paper_bgcolor='black', # Entire diagram background black
+      font=dict(color='white') # Font color white
+  )
+
+  # Aktualisiert die Y-Achsen-Titel und Gitterlinien
+  fig.update_yaxes(title_text="Herzfrequenz (bpm)", secondary_y=False, showgrid=True, gridcolor='rgba(255,255,255,0.1)')
+  fig.update_yaxes(title_text="Leistung (Watt)", secondary_y=True, showgrid=True, gridcolor='rgba(255,255,255,0.1)')
+  fig.update_xaxes(title_text="Zeit (Sekunden)", showgrid=True, gridcolor='rgba(255,255,255,0.1)')
+
+
+  return fig
 
 
 def mittelwerte(df):
