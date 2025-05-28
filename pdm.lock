@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:721982d97621d7bb98900b14a34f5272881707412f35c405058dd50997babc7d"
+content_hash = "sha256:3df5c06c8d82b5858c1c350f5ffe9ea81c7cf9454fa3a6d9dcffbd3fa16b81ef"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -1180,6 +1180,17 @@ files = [
 ]
 
 [[package]]
+name = "narwhals"
+version = "1.41.0"
+requires_python = ">=3.8"
+summary = "Extremely lightweight compatibility layer between dataframe libraries"
+groups = ["default"]
+files = [
+    {file = "narwhals-1.41.0-py3-none-any.whl", hash = "sha256:d958336b40952e4c4b7aeef259a7074851da0800cf902186a58f2faeff97be02"},
+    {file = "narwhals-1.41.0.tar.gz", hash = "sha256:0ab2e5a1757a19b071e37ca74b53b0b5426789321d68939738337dfddea629b5"},
+]
+
+[[package]]
 name = "nbclient"
 version = "0.10.2"
 requires_python = ">=3.9.0"
@@ -1557,6 +1568,21 @@ groups = ["default"]
 files = [
     {file = "platformdirs-4.3.8-py3-none-any.whl", hash = "sha256:ff7059bb7eb1179e2685604f4aaf157cfd9535242bd23742eadc3c13542139b4"},
     {file = "platformdirs-4.3.8.tar.gz", hash = "sha256:3d512d96e16bcb959a814c9f348431070822a6496326a4be0911c40b5a74c2bc"},
+]
+
+[[package]]
+name = "plotly"
+version = "6.1.2"
+requires_python = ">=3.8"
+summary = "An open-source interactive data visualization library for Python"
+groups = ["default"]
+dependencies = [
+    "narwhals>=1.15.1",
+    "packaging",
+]
+files = [
+    {file = "plotly-6.1.2-py3-none-any.whl", hash = "sha256:f1548a8ed9158d59e03d7fed548c7db5549f3130d9ae19293c8638c202648f6d"},
+    {file = "plotly-6.1.2.tar.gz", hash = "sha256:4fdaa228926ba3e3a213f4d1713287e69dcad1a7e66cf2025bd7d7026d5014b4"},
 ]
 
 [[package]]
