@@ -35,4 +35,4 @@ In dem Plot kann man belibig über die Datenpunkte hovern um genaue Werte zu erh
 
 ### Ergebnis
 Nach Aufgabe 3 schaut das Programm wiefolgt aus:
-
+![Diagramm](pictures_readme/nach_Aufgabe_3.png)

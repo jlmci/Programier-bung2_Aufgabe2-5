@@ -53,21 +53,20 @@ with personendaten:
 
 
 
+st.write("## Leistungstest")
 
 
-
-
-
-
-
-
-st.write("## EKG-Daten")
-  # Standardwert für die maximale Herzfrequenz
 if "max_hr_input_user" not in st.session_state:
-    st.session_state.max_hr_input_user = 180
+    st.session_state.max_hr_input_user = 180  # Standardwert für die maximale Herzfrequenz
 
-user_input_str = st.text_input(
-    label="Maximale Herzfrequenz (bpm):",
+
+max_hf, max_hf_einstellen = st.columns([2,3], gap="small")
+with max_hf:
+    st.markdown("<div style='padding-top: 27px; font-size: 21px;'>Maximale Herzfrequenz (bpm)</div>", unsafe_allow_html=True)
+
+with max_hf_einstellen:
+    user_input_str = st.text_input(
+    label="",
     value=str(st.session_state.max_hr_input_user),
     key="max_hr_input_widget"
 )
@@ -78,12 +77,6 @@ try:
         st.session_state.max_hr_input_user = new_hr_value
 except ValueError:
     st.error("Bitte gib eine gültige Zahl für die Herzfrequenz ein.")
-#st.write(st.session_state.max_hr_input_user)
-
-
-
-
-
 
 
 
@@ -101,24 +94,35 @@ st.plotly_chart(fig)  # Zeige den Plot in der Streamlit-App an
 
 
 
-
-
-
-
-
-
-Leistung_mean, hr_zones = st.columns([1,1], gap="small")
+Leistung_mean, hr_zones, time_in_hr_zones = st.columns([1,1,1], gap="small")
 with Leistung_mean:
-    st.markdown("<div style='padding-top: 23px; font-size: 32px;'>Leistung</div>", unsafe_allow_html=True)
-    st.write("Mittelwert: ", read_pandas.mittelwerte(data_plot)[0])
-    st.write("Maximalwert: ", read_pandas.mittelwerte(data_plot)[1])
+    st.markdown("<div style='padding-top: 0px; font-size: 21px;'>Leistungsdaten (Watt)</div>", unsafe_allow_html=True)
+    st.write("Mittelwert: ", read_pandas.mittelwerte(data_plot)[0].round(2))
+    st.write("Maximalwert: ", read_pandas.mittelwerte(data_plot)[1].round(2))
+    st.write("Mittelwert in Zone 1: ", zone1["PowerOriginal"].mean().round(2))
+    st.write("Mittelwert in Zone 2: ", zone2["PowerOriginal"].mean().round(2))
+    st.write("Mittelwert in Zone 3: ", zone3["PowerOriginal"].mean().round(2))
+    st.write("Mittelwert in Zone 4: ", zone4["PowerOriginal"].mean().round(2))
+    st.write("Mittelwert in Zone 5: ", zone5["PowerOriginal"].mean().round(2))
 
 with hr_zones:
-    st.markdown("<div style='padding-top: 23px; font-size: 32px;'>Herzfrequenzzonen</div>", unsafe_allow_html=True)
-    st.write("Mittelwert von Zone 1: ", zone1["HeartRate"].mean())
-    st.write("Mittelwert von Zone 2: ", zone2["HeartRate"].mean())
-    st.write("Mittelwert von Zone 3: ", zone3["HeartRate"].mean())
-    st.write("Mittelwert von Zone 4: ", zone4["HeartRate"].mean())
-    st.write("Mittelwert von Zone 5: ", zone5["HeartRate"].mean())    
+    st.markdown("<div style='padding-top: 0px; font-size: 21px;'>Herzfrequenz (bpm)</div>", unsafe_allow_html=True)
+    st.write("Mittelewert", df["HeartRate"].mean().round(2))
+    st.write("Maximal: ", df["HeartRate"].max().round(2))
+    st.write("Mittelwert von Zone 1: ", zone1["HeartRate"].mean().round(2))
+    st.write("Mittelwert von Zone 2: ", zone2["HeartRate"].mean().round(2))
+    st.write("Mittelwert von Zone 3: ", zone3["HeartRate"].mean().round(2))
+    st.write("Mittelwert von Zone 4: ", zone4["HeartRate"].mean().round(2))
+    st.write("Mittelwert von Zone 5: ", zone5["HeartRate"].mean().round(2))    
+
+with time_in_hr_zones:
+    st.markdown("<div style='padding-top: 0px; font-size: 21px;'>Zeit (s)</div>", unsafe_allow_html=True)
+    st.write("gesamte Zeit: ", len(df))
+    st.markdown("<div style='padding-top: 40px; font-size: 21px;'></div>", unsafe_allow_html=True)
+    st.write("Zeit in Zone 1: ", len(zone1))
+    st.write("Zeit in Zone 2: ", len(zone2))
+    st.write("Zeit in Zone 3: ", len(zone3))
+    st.write("Zeit in Zone 4: ", len(zone4))
+    st.write("Zeit in Zone 5: ", len(zone5))
 # Hier können Sie die EKG-Daten anzeigen, die zu der ausgewählten Person gehören
 

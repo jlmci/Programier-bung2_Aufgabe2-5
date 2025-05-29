@@ -80,9 +80,18 @@ def make_plot(df):
       'Zone 2': '#87CEEB', # Sky blue
       'Zone 3': '#FFD700', # Gold
       'Zone 4': '#FFA500', # Orange
-      'Zone 5': '#FF4500', # Orange-red
-      'Unbekannt': '#CCCCCC' # Gray for unknown zones
+      'Zone 5': '#FF4500' # Orange-red
   }
+
+  if 'PowerOriginal' in df.columns: # Stellt sicher, dass die Spalte PowerOriginal existiert
+      fig.add_trace(go.Scatter(
+          x=df['Time'],
+          y=df['PowerOriginal'],
+          mode='lines',
+          name='Leistung (Watt)', # Name für die Leistungskurve in der Legende
+          line=dict(color='gray', width=2), # Graue Farbe für die Leistungskurve
+          showlegend=True # Zeigt diesen Trace in der Legende an
+      ), secondary_y=True) # Zuweisung zur sekundären Y-Achse
 
   # Ensure the DataFrame has the 'HeartZone' column
   if 'HeartZone' not in df.columns:
@@ -114,21 +123,12 @@ def make_plot(df):
   )
 
     # Plottet die Leistungskurve auf der sekundären Y-Achse
-  if 'PowerOriginal' in df.columns: # Stellt sicher, dass die Spalte PowerOriginal existiert
-      fig.add_trace(go.Scatter(
-          x=df['Time'],
-          y=df['PowerOriginal'],
-          mode='lines',
-          name='Leistung (Watt)', # Name für die Leistungskurve in der Legende
-          line=dict(color='gray', width=2), # Graue Farbe für die Leistungskurve
-          showlegend=True # Zeigt diesen Trace in der Legende an
-      ), secondary_y=True) # Zuweisung zur sekundären Y-Achse
-
+  
 
   # Add dummy traces for the legend to show zone colors
   sorted_zones = [
       'Zone 1', 'Zone 2', 'Zone 3',
-      'Zone 4', 'Zone 5', 'Unbekannt'
+      'Zone 4', 'Zone 5'
   ]
   for zone_name in sorted_zones:
       if zone_name in zone_colors: # Only add if the zone has a defined color
@@ -143,15 +143,13 @@ def make_plot(df):
 
   # Layout of the plot
   fig.update_layout(
-      title='Herzfrequenzkurve mit zonenfarbigen Datenpunkten',
       xaxis_title='Zeit (Sekunden)',
       yaxis_title='Herzfrequenz (bpm)',
       hovermode='x unified', # Show information for all traces at an X-point
-      legend_title='Herzfrequenzzonen',
-      height=500,
-      plot_bgcolor='black', # Plot background black
-      paper_bgcolor='black', # Entire diagram background black
-      font=dict(color='white') # Font color white
+      legend_title='Legende',
+      height=450,
+      font=dict(color='white'), # Font color white
+      margin=dict(t=20)
   )
 
   # Aktualisiert die Y-Achsen-Titel und Gitterlinien
