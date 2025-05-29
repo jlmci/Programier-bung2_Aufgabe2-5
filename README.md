@@ -25,14 +25,15 @@ Nach Aufgabe 2 hat das Programm folgendes aussehen:
 ### Beschreibung
 Die App kann interaktiv nach Namensauswahl Personendaten und Bild einer im Datensatz gespeicherten Person ausgeben und präsentieren (Aufgabe 2).
 
-Weiter wird unten ein Plot eines Leistungstests mit Herzfrequenz, welche nach Belastungsstufe, welche davor eingegeben werden kann, eingefärbt ist. Außerdem gibt es dort überlagernd einen Plot, welcher der die erbrachte Leistung anzeigt.
+Weiter wird unten ein Plot eines Leistungstests mit Herzfrequenz und Lesitungskurve angezeigt. Die Herzfrequenz wird in unterscheidliche Herzzonen, die farblich voneinander unterscheidne werden können, eingeteilt. Die Herzfreqeunzzonen-einteilung ist dynamisch, d.h. der Nutzer kann die Maximale Herzfreqeunz eingeben und die Zonen werden darauf angepasst.
 
-Unter dem Plot finden sich noch weitere Werte, wie Durchschnittsleistung und Zeit verbracht pro Herzfrequenzzone.
+Unter dem Plot finden sich noch weitere Werte zur besseren Diagnose der Kurven, wie Durchschnittsleistung und Zeit verbracht pro Herzfrequenzzone.
 
 ### Benutzung
 Die App wird gestartet, indem man im Terminal "streamlit run main.py" eingibt. Dann kann man bei "Dashboard von" die zu betrachtende Person aus einem dropdown Menü auswählen. Über den Daten des Leistungstests kann man die maximale Herzfrequenz eingeben - der Wert ist zuerst standardmäßig auf 180bpm gesetzt.
 
 In dem Plot kann man belibig über die Datenpunkte hovern um genaue Werte zu erhalten, oben rechts vom Plot gibt es noch weitere Funktionen, wie speichern als png und Zoomen.
+
 
 ### Ergebnis
 Nach Aufgabe 3 schaut das Programm wiefolgt aus:

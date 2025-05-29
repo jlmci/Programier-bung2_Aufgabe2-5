@@ -82,7 +82,7 @@ except ValueError:
 
 
 data_plot = read_pandas.read_my_csv()   #lese die EKG-Daten ein
-zone1, zone2, zone3, zone4, zone5, df, zone_boundries = read_pandas.calculate_HR_zone(data_plot, float(st.session_state.max_hr_input_user))
+zone1, zone2, zone3, zone4, zone5, df, zone_boundries = read_pandas.calculate_HR_zone(data_plot, int(st.session_state.max_hr_input_user))
 fig = read_pandas.make_plot(df)  # Erstelle den Plot
 
 #st.write(fig)  # Erstelle den Plot
@@ -99,21 +99,21 @@ with Leistung_mean:
     st.markdown("<div style='padding-top: 0px; font-size: 21px;'>Leistungsdaten (Watt)</div>", unsafe_allow_html=True)
     st.write("Mittelwert: ", read_pandas.mittelwerte(data_plot)[0].round(2))
     st.write("Maximalwert: ", read_pandas.mittelwerte(data_plot)[1].round(2))
-    st.write("Mittelwert in Zone 1: ", zone1["PowerOriginal"].mean().round(2))
-    st.write("Mittelwert in Zone 2: ", zone2["PowerOriginal"].mean().round(2))
-    st.write("Mittelwert in Zone 3: ", zone3["PowerOriginal"].mean().round(2))
-    st.write("Mittelwert in Zone 4: ", zone4["PowerOriginal"].mean().round(2))
-    st.write("Mittelwert in Zone 5: ", zone5["PowerOriginal"].mean().round(2))
+    st.write("Mittelwert in Zone 1: ", round(zone1["PowerOriginal"].mean(),2))
+    st.write("Mittelwert in Zone 2: ", round(zone2["PowerOriginal"].mean(),2))
+    st.write("Mittelwert in Zone 3: ", round(zone3["PowerOriginal"].mean(),2))
+    st.write("Mittelwert in Zone 4: ", round(zone4["PowerOriginal"].mean(),2))
+    st.write("Mittelwert in Zone 5: ", round(zone5["PowerOriginal"].mean(),2))
 
 with hr_zones:
     st.markdown("<div style='padding-top: 0px; font-size: 21px;'>Herzfrequenz (bpm)</div>", unsafe_allow_html=True)
     st.write("Mittelewert", df["HeartRate"].mean().round(2))
     st.write("Maximal: ", df["HeartRate"].max().round(2))
-    st.write("Mittelwert von Zone 1: ", zone1["HeartRate"].mean().round(2))
-    st.write("Mittelwert von Zone 2: ", zone2["HeartRate"].mean().round(2))
-    st.write("Mittelwert von Zone 3: ", zone3["HeartRate"].mean().round(2))
-    st.write("Mittelwert von Zone 4: ", zone4["HeartRate"].mean().round(2))
-    st.write("Mittelwert von Zone 5: ", zone5["HeartRate"].mean().round(2))    
+    st.write("Mittelwert von Zone 1: ", round(zone1["HeartRate"].mean(),2))
+    st.write("Mittelwert von Zone 2: ", round(zone2["HeartRate"].mean(),2))
+    st.write("Mittelwert von Zone 3: ", round(zone3["HeartRate"].mean(),2))
+    st.write("Mittelwert von Zone 4: ", round(zone4["HeartRate"].mean(),2))
+    st.write("Mittelwert von Zone 5: ", round(zone5["HeartRate"].mean(),2))    
 
 with time_in_hr_zones:
     st.markdown("<div style='padding-top: 0px; font-size: 21px;'>Zeit (s)</div>", unsafe_allow_html=True)
