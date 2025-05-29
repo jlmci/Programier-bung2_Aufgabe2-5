@@ -53,8 +53,8 @@ with personendaten:
 
 
 
-st.write("## Leistungstest")
 
+st.write("## Leistungstest")
 
 if "max_hr_input_user" not in st.session_state:
     st.session_state.max_hr_input_user = 180  # Standardwert für die maximale Herzfrequenz
@@ -68,8 +68,7 @@ with max_hf_einstellen:
     user_input_str = st.text_input(
     label="",
     value=str(st.session_state.max_hr_input_user),
-    key="max_hr_input_widget"
-)
+    key="max_hr_input_widget")
 
 try:
     new_hr_value = int(user_input_str)
@@ -87,8 +86,6 @@ fig = read_pandas.make_plot(df)  # Erstelle den Plot
 
 #st.write(fig)  # Erstelle den Plot
 st.plotly_chart(fig)  # Zeige den Plot in der Streamlit-App an
-
-
 
 
 

@@ -25,9 +25,8 @@ def get_person_data_ba_name(person_data, name_to_find):
         if name_to_find[0] in i["firstname"] and name_to_find[1] in i["lastname"]:
             #print(i["firstname"], i["lastname"])
             return i
-        
-
     return None
+
 
 
 

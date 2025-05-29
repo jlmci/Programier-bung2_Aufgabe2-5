@@ -1,11 +1,7 @@
-# %%
 
 # Paket für Bearbeitung von Tabellen
 import pandas as pd
 import numpy as np
-
-
-# Paket
 ## zuvor !pip install plotly
 ## ggf. auch !pip install nbformat
 import plotly.express as px
@@ -14,16 +10,16 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 pio.renderers.default = 'browser'  # Setzt den Standard-Renderer auf den Browser
 
+
+
 def read_my_csv():
     # Einlesen eines Dataframes
     ## "\t" steht für das Trennzeichen in der txt-Datei (Tabulator anstelle von Beistrich)
     ## header = None: es gibt keine Überschriften in der txt-Datei
     df = pd.read_csv("data/activities/activity.csv", sep=",", usecols=["HeartRate","PowerOriginal"], header = 0)
-
     df["Time"] = np.arange(0, len(df))  # Erstelle eine Zeitspalte in Millisekunden
-    
-
     return df
+
 
 def calculate_HR_zone(df, max_Hr_input=180):
   df["HeartZone"] = ""
@@ -70,8 +66,8 @@ def calculate_HR_zone(df, max_Hr_input=180):
   return filter_Zone1, filter_Zone2, filter_Zone3, filter_Zone4, filter_Zone5, df, zone_boundaries
 
 
-def make_plot(df):
-  
+
+def make_plot(df): 
   #fig = go.Figure()
   fig = make_subplots(specs=[[{"secondary_y": True}]], shared_xaxes=True)
   # Define a color palette for the zones (for the markers)
@@ -161,6 +157,7 @@ def make_plot(df):
   return fig
 
 
+
 def mittelwerte(df):
     # Berechnet den Mittelwert der Spalten "HeartRate" und "PowerOriginal"
     power_original_mean = df["PowerOriginal"].mean()
@@ -169,6 +166,9 @@ def mittelwerte(df):
     return power_original_mean , power_original_max
 
 
+
+
+  
     
 if __name__ == "__main__":
     df = read_my_csv()
