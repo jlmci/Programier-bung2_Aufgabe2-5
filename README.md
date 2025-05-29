@@ -1,4 +1,5 @@
 # Programier-bung2_Aufgabe2-5
+Jakob Ladurner, Janick Hoffmann
 ## Aufgabe 2
 ### Vorarbeit
 Zu Beginn sollte ein Use-Case-Diagramm, ein Activity Diagramm, sowie ein Mock up vom Dashboard erstellt werden.
