@@ -80,6 +80,7 @@ except ValueError:
 
 
 
+
 data_plot = read_pandas.read_my_csv()   #lese die EKG-Daten ein
 zone1, zone2, zone3, zone4, zone5, df, zone_boundries = read_pandas.calculate_HR_zone(data_plot, int(st.session_state.max_hr_input_user))
 fig = read_pandas.make_plot(df)  # Erstelle den Plot
