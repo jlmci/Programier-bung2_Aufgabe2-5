@@ -60,15 +60,22 @@ if "max_hr_input_user" not in st.session_state:
     st.session_state.max_hr_input_user = 180  # Standardwert für die maximale Herzfrequenz
 
 
-max_hf, max_hf_einstellen = st.columns([2,3], gap="small")
+max_hf, max_hf_einstellen = st.columns([18,3], gap="small")
 with max_hf:
-    st.markdown("<div style='padding-top: 27px; font-size: 21px;'>Maximale Herzfrequenz (bpm)</div>", unsafe_allow_html=True)
-
+    st.markdown("<div style='padding-top: 27px; font-size: 21px;'>Maximale Herzfrequenz (nur Wert zwischen 160 und 210 eingeben)</div>", unsafe_allow_html=True)
 with max_hf_einstellen:
     user_input_str = st.text_input(
     label="",
     value=str(st.session_state.max_hr_input_user),
     key="max_hr_input_widget")
+
+try:
+    user_input_value = int(user_input_str)
+    if user_input_value < 160 or user_input_value > 210:
+        st.error("Bitte gib eine Zahl zwischen 160 und 210 ein.")
+except:
+    pass
+
 
 try:
     new_hr_value = int(user_input_str)
