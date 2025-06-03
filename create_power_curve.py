@@ -60,7 +60,7 @@ def plot_power_curve(power_curve_df):
     power_curve_df (DataFrame): The DataFrame containing the best efforts.
     """
     fig = px.line(power_curve_df, x=power_curve_df.index, y='BestEffort', log_x = True, title='Power Curve')
-    fig.update_layout(xaxis_title='Time (seconds)', yaxis_title='Power (Watts)')
+    fig.update_layout(xaxis_title="Time (seconds)" , yaxis_title="Power (Watts)")
 
     fig.write_image("power_curve.png")  # Speichert das Diagramm als PNG-Datei
     return fig
