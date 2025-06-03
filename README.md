@@ -38,3 +38,24 @@ In dem Plot kann man belibig über die Datenpunkte hovern um genaue Werte zu erh
 ### Ergebnis
 Nach Aufgabe 3 schaut das Programm wiefolgt aus:
 ![Diagramm](pictures_readme/nach_Aufgabe_3.png)
+
+
+
+## Aufgabe 4
+### Planung
+
+### Funktion
+Es wird eine Leistungskurve erstellt mit der man erkennen kann wie lange man eine gewisse Leistung erbringen kann. Dafür werden die Leistungsdaten aus dme Dataframe gefiltert und anschließend mit Windows mit unterschiedlichen Zeitspannen über die daten rotiert. Von jedem window wird der Durchschnittswert gneommen und anschließend von allen durchschnittswerten der Maximalwert genommen.
+
+Die Kurve der maximalleistungen wird mit plotly dargestellt. Außerdem wird die Kurve als power_curve.png gespeichert und in der Stramlit App unter der Grafik aus Aufgabe 3 dargestellt. 
+
+### Ergebnis
+Das gespeicherte Bild schaut wie folgt aus:
+![Diagramm](pictures_readme/power_curve.png)
+
+Die Streamlit App sieht nach nach der Aufgabe 4 wie folgt aus:
+![Diagramm](pictures_readme/power_curve_streamlit.png)
+
+
+
+
