@@ -138,6 +138,6 @@ with time_in_hr_zones:
 path2 = "data/activities/activity.csv"
 df2 = create_power_curve.read_csv(path2)
 power_curve_df = create_power_curve.create_power_curve(df2)
-fig2 = (create_power_curve.plot_power_curve(power_curve_df))
+fig2 = create_power_curve.plot_power_curve(power_curve_df)
 st.plotly_chart(fig2)  # Zeige den Plot in der Streamlit-App an
 

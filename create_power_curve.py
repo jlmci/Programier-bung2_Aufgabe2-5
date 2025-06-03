@@ -77,8 +77,7 @@ def plot_power_curve(power_curve_df):
     # Neue Spalte für formatierten Zeitwert
     power_curve_df["formated_Time"] = ""
 
-    for index, row in power_curve_df.iterrows():
-        power_curve_df.at[index, "formated_Time"] = format_time(df.index[index])
+    power_curve_df["formated_Time"] = power_curve_df.index.map(format_time)
 
     # Plot mit formatierten Zeitwerten auf der X-Achse
     fig = px.line(
