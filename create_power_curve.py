@@ -52,17 +52,49 @@ def create_power_curve(df, window_size=[10,30,60,120,300,600,900,1200,1500,1800,
     
     return power_curve_df
 
+import plotly.express as px
+import pandas as pd
+
+
+
+# Labels manuell umwandeln
+def format_time(s):
+    if s < 60:
+        return f"{s}s"
+    elif s < 3600:
+        return f"{s//60}m"
+    else:
+        return f"{s//3600}h"
+
+
 def plot_power_curve(power_curve_df):
     """
     Plot the power curve using Plotly.
-    
-    Parameters:
-    power_curve_df (DataFrame): The DataFrame containing the best efforts.
-    """
-    fig = px.line(power_curve_df, x=power_curve_df.index, y='BestEffort', log_x = True, title='Power Curve')
-    fig.update_layout(xaxis_title="Time (seconds)" , yaxis_title="Power (Watts)")
 
-    fig.write_image("pictures_readme/power_curve.png")  # Speichert das Diagramm als PNG-Datei
+    Parameters:
+    power_curve_df (DataFrame): The DataFrame containing 'Seconds' and 'BestEffort'.
+    """
+    # Neue Spalte für formatierten Zeitwert
+    power_curve_df["formated_Time"] = ""
+
+    for index, row in power_curve_df.iterrows():
+        power_curve_df.at[index, "formated_Time"] = format_time(df.index[index])
+
+    # Plot mit formatierten Zeitwerten auf der X-Achse
+    fig = px.line(
+        power_curve_df,
+        x="formated_Time",
+        y="BestEffort",
+        title="Power Curve"
+    )
+
+    fig.update_layout(
+        xaxis_title="Time",
+        yaxis_title="Power (Watts)",
+        template="plotly_dark"
+    )
+    #Auskommentiert damit das Bild nicht jedes mal gespeichert wird
+    #fig.write_image("pictures_readme/power_curve.png")
     return fig
 
 
