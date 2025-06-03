@@ -22,7 +22,7 @@ def find_best_effort(df, window_size, power_col="PowerOriginal"):
    max_value = max_value.max()
    return int(max_value)
 
-def create_power_curve(df, window_size=[10,30,60,120,300,600,1800,6000,9000,1800, 3600, 7200], power_col="PowerOriginal"):
+def create_power_curve(df, window_size=[10,30,60,120,300,600,900,1200,1500,1800,6000,9000,1800,3600,7200], power_col="PowerOriginal"):
     """
     Create a power curve from the DataFrame.
     
@@ -59,8 +59,8 @@ def plot_power_curve(power_curve_df):
     Parameters:
     power_curve_df (DataFrame): The DataFrame containing the best efforts.
     """
-    fig = px.line(power_curve_df, x=power_curve_df.index, y='BestEffort', title='Power Curve')
-    fig.update_layout(xaxis_title='Window Size (seconds)', yaxis_title='Best Effort (Watts)')
+    fig = px.line(power_curve_df, x=power_curve_df.index, y='BestEffort', log_x = True, title='Power Curve')
+    fig.update_layout(xaxis_title='Time (seconds)', yaxis_title='Power (Watts)')
     return fig
 
 

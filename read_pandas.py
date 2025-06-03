@@ -153,7 +153,6 @@ def make_plot(df):
   fig.update_yaxes(title_text="Leistung (Watt)", secondary_y=True, showgrid=True, gridcolor='rgba(255,255,255,0.1)')
   fig.update_xaxes(title_text="Zeit (Sekunden)", showgrid=True, gridcolor='rgba(255,255,255,0.1)')
 
-
   return fig
 
 
