@@ -3,6 +3,7 @@ from PIL import Image #paket für Bilder
 
 import read_data
 import read_pandas # Importiere die Funktionen aus read_data.py
+import create_power_curve
 # Importiere die Funktionen aus read_data.py
 # Lade die Personendaten und die Namensliste
 data = read_data.load_person_data()
@@ -130,4 +131,13 @@ with time_in_hr_zones:
     st.write("Zeit in Zone 4: ", len(zone4))
     st.write("Zeit in Zone 5: ", len(zone5))
 # Hier können Sie die EKG-Daten anzeigen, die zu der ausgewählten Person gehören
+
+
+
+#Power kurve erstellen
+path2 = "data/activities/activity.csv"
+df2 = create_power_curve.read_csv(path2)
+power_curve_df = create_power_curve.create_power_curve(df2)
+fig2 = (create_power_curve.plot_power_curve(power_curve_df))
+st.plotly_chart(fig2)  # Zeige den Plot in der Streamlit-App an
 
