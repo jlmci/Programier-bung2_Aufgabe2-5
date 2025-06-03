@@ -43,7 +43,7 @@ Nach Aufgabe 3 schaut das Programm wiefolgt aus:
 
 ## Aufgabe 4
 ### Ablaufdiagramm
-![Diagramm](pictures_readme/power_curve.png)
+![Diagramm](pictures_readme/Ablaufdiagramm_Aufgabe4.png)
 ### Funktion
 Es wird eine Leistungskurve erstellt mit der man erkennen kann wie lange man eine gewisse Leistung erbringen kann. Dafür werden die Leistungsdaten aus dme Dataframe gefiltert und anschließend mit Windows mit unterschiedlichen Zeitspannen über die daten rotiert. Von jedem window wird der Durchschnittswert gneommen und anschließend von allen durchschnittswerten der Maximalwert genommen.
 
