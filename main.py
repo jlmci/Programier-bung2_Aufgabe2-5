@@ -1,14 +1,10 @@
 import streamlit as st
 from PIL import Image #paket für Bilder
 
-import read_data
 import person
-import read_pandas # Importiere die Funktionen aus read_data.py
+import read_pandas
 import create_power_curve
-# Importiere die Funktionen aus read_data.py
-# Lade die Personendaten und die Namensliste
-data = read_data.load_person_data()
-person_names = read_data.create_name_list()
+
 
 # App Titel
 st.write("# EKG APP")
