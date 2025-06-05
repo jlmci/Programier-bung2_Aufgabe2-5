@@ -56,7 +56,7 @@ class EKGdata:
         series = self.df["Messwerte in mV"]
         series = series.iloc[::respacing_factor]
 
-        threshold = series.mean() + 2 * series.std()  # Set threshold as mean + 2*std
+        threshold = series.mean() + 2 * series.std()+5  # Set threshold as mean + 2*std
         
         # Filter the series
         series = series[series>threshold]
@@ -72,21 +72,77 @@ class EKGdata:
             current = next
             next = row
 
-            if last < current and current > next and current > threshold:
+            if last <= current and current >= next and current > threshold:
                 peaks.append(index-respacing_factor)
 
         return peaks
         
-    def estimate_heart_rate(self):
+    def estimate_heart_rate_avarage(self):
         # Wir nehmen die Peaks und berechnen die Herzfrequenz
         peaks = self.find_peaks()
         sample_rate = 500  # 500 Hz
+
+        if len(peaks) < 2:
+            raise ValueError("Nicht genug Peaks zur Berechnung der Herzfrequenz.")
+
+        # ➤ RR-Intervalle und BPM berechnen
         peak_intervals = np.diff(peaks)  # Abstand in Samples
         rr_intervals_sec = peak_intervals / sample_rate  # Abstand in Sekunden
-        bpm_values = 60 / rr_intervals_sec  # Herzfrequenz in BPM
+        bpm_values = 60 / rr_intervals_sec
+
+        # ➤ Unplausible BPM-Werte entfernen (> 300 BPM)
+        bpm_values = bpm_values[bpm_values <= 300]
+
+        if len(bpm_values) == 0:
+            raise ValueError("Alle berechneten BPM-Werte sind ungültig (z. B. > 300).")
 
         average_bpm = np.mean(bpm_values)
         return average_bpm
+    
+    def estimate_heart_rate(self):
+        sample_rate = 500  # 500 Hz
+        window_size = 10
+        max_bpm_threshold = 300
+
+        peaks = self.find_peaks()
+        if len(peaks) < window_size + 1:
+            raise ValueError("Nicht genug Peaks für Herzfrequenzberechnung.")
+
+        # RR-Intervalle und BPM berechnen
+        peak_intervals = np.diff(peaks)
+        rr_intervals_sec = peak_intervals / sample_rate
+        bpm_values = 60 / rr_intervals_sec
+
+        # Nur gültige BPMs (z. B. < 300 BPM)
+        valid_indices = bpm_values <= max_bpm_threshold
+        bpm_values = bpm_values[valid_indices]
+        valid_peaks = [peaks[i + 1] for i, valid in enumerate(valid_indices) if valid]
+
+        if len(bpm_values) < window_size:
+            raise ValueError("Nicht genug gültige BPM-Werte für Sliding Window.")
+
+        # Sliding Average
+        avg_bpm = []
+        peak_times = []
+
+        for i in range(len(bpm_values)):
+            if i < window_size:
+                mean_bpm = np.mean(bpm_values[:window_size])  # Konstante Anfangswerte
+            else:
+                mean_bpm = np.mean(bpm_values[i - window_size:i])
+
+            peak_index = valid_peaks[i]
+            peak_time = (self.df["Zeit in ms"].iloc[peak_index] - self.df["Zeit in ms"].iloc[0]) / 1000
+
+            avg_bpm.append(mean_bpm)
+            peak_times.append(peak_time)
+
+        heart_rate_df = pd.DataFrame({
+            "Zeit in s": peak_times,
+            "Herzfrequenz (BPM)": avg_bpm
+        })
+
+        return heart_rate_df
         
     def plot_time_series(self):
         """
@@ -105,7 +161,7 @@ class EKGdata:
         )
 
         # Initialer Zoombereich: 0–10 Sekunden
-        self.fig.update_xaxes(range=[0, 10], title="Zeit (s)")
+        self.fig.update_xaxes(range=[10, 30], title="Zeit (s)")
         self.fig.update_yaxes(title="Messwerte (mV)")
 
         # ➕ Peaks berechnen
@@ -114,6 +170,7 @@ class EKGdata:
         # Zeit- & Messwertwerte der Peaks extrahieren
         peak_times = self.df.loc[peaks, "Zeit in s"]
         peak_values = self.df.loc[peaks, "Messwerte in mV"]
+        #print('Size peak df: {0}, {1}'.format(len(peak_times), len(peak_values)))
 
         # ➕ Scatter-Plot für Peaks hinzufügen
         self.fig.add_scatter(
@@ -123,6 +180,28 @@ class EKGdata:
             marker=dict(color="red", size=8, symbol="circle"),
             name="Peaks"
         )
+        try:
+            heart_rate_df = self.estimate_heart_rate()
+            self.fig.add_scatter(
+                x=heart_rate_df["Zeit in s"],
+                y=heart_rate_df["Herzfrequenz (BPM)"],
+                mode="lines",
+                line=dict(color="green", dash="dot"),
+                yaxis="y2",
+                name="Herzfrequenz (BPM)"
+            )
+
+            # ➕ Sekundäre Y-Achse für Herzfrequenz aktivieren
+            self.fig.update_layout(
+                yaxis2=dict(
+                    title="Herzfrequenz (BPM)",
+                    overlaying="y",
+                    side="right",
+                    showgrid=False
+                )
+            )
+        except Exception as e:
+                print("Herzfrequenz konnte nicht berechnet werden:", e)
 
         return self.fig
 
@@ -131,12 +210,15 @@ class EKGdata:
 
 if __name__ == "__main__":
     print("This is a module with some functions to read the EKG data")
-    ekg_3_dict = EKGdata.load_by_id(4)
+    ekg_3_dict = EKGdata.load_by_id(3)
     ekg_3 = EKGdata(ekg_3_dict)
+    #print('Size original df: {0}, {1}'.format(len(ekg_3.df['Messwerte in mV']), len(ekg_3.df['Zeit in ms'])))
     peaks_in3 = ekg_3.find_peaks()
     #print("Peaks in EKG 3:", peaks_in3)
     ekg_hr = ekg_3.estimate_heart_rate()
-    print("Estimated Heart Rate for EKG 3:", ekg_hr)
+    print(ekg_hr)
+    ekg_hr_mean = ekg_3.estimate_heart_rate_avarage()
+    print("Durchschnittliche Herzfrequenz:", ekg_hr_mean)
     fig= ekg_3.plot_time_series()
     fig.show()
 
