@@ -75,6 +75,18 @@ class Person:
                 return eintrag
         return None
     
+    def get_ekg_list(currend):
+        ''' A function that returns a list of EKG data for the person.'''
+        person_used = Person.find_person_data_by_name(currend)
+        ekg_list = []
+        if len(person_used["ekg_tests"]) >= 1:
+            for ekg in person_used["ekg_tests"]:
+                ekg_list.append(ekg["id"])
+        return ekg_list
+
+
+        
+    
 
     
 

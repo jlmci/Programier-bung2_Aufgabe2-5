@@ -4,6 +4,7 @@ from PIL import Image #paket für Bilder
 import person
 import read_pandas
 import create_power_curve
+import ekgdata
 
 
 # App Titel
@@ -136,3 +137,18 @@ power_curve_df = create_power_curve.create_power_curve(df2)
 fig2 = create_power_curve.plot_power_curve(power_curve_df)
 st.plotly_chart(fig2)  # Zeige den Plot in der Streamlit-App an
 
+
+#ekg graph erstellen
+
+st.write("## EKG Graph")
+ekg_text, ekg_id_options = st.columns([1,2], gap="small")
+with ekg_text:
+    st.markdown("<div style='padding-top: 0px; font-size: 21px;'>Wähle eine EKG ID aus: </div>", unsafe_allow_html=True)
+with ekg_id_options:
+    ekg_id = st.selectbox('', options=person.Person.get_ekg_list(st.session_state.current_user))
+
+ekg_data = ekgdata.EKGdata.load_by_id(ekg_id)
+if ekg_data:
+    ekg_data = ekgdata.EKGdata(ekg_data)
+    ekg_data.plot_time_series()
+    st.plotly_chart(ekg_data.fig)  # Zeige den Plot in der Streamlit-App an
