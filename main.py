@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image #paket für Bilder
 
 import read_data
+import person
 import read_pandas # Importiere die Funktionen aus read_data.py
 import create_power_curve
 # Importiere die Funktionen aus read_data.py
@@ -22,23 +23,22 @@ ueberschrift, person_auswahl = st.columns([1,2], gap="small")
 with ueberschrift:
     st.markdown("<div style='padding-top: 23px; font-size: 32px;'>Dashboard von</div>", unsafe_allow_html=True)
 with person_auswahl:
-    st.session_state.current_user = st.selectbox('', options = read_data.create_name_list())
+    st.session_state.current_user = st.selectbox('', options = person.Person.get_person_list())
 
 #st.markdown("<br>", unsafe_allow_html=True)  # Leerer Platzhalter, um den Abstand zu vergrößern
 
 
 try:
-    st.session_state.picture_path = read_data.get_person_data_ba_name(data, st.session_state.current_user)["picture_path"]
+    st.session_state.picture_path = person.Person.find_person_data_by_name(st.session_state.current_user)["picture_path"]
     if st.session_state.current_user in person_names:
-        st.session_state.picture_path = read_data.get_person_data_ba_name(data, st.session_state.current_user)["picture_path"]
+        st.session_state.picture_path = person.Person.find_person_data_by_name(st.session_state.current_user)["picture_path"]
 except:
     st.session_state.picture_path = "data/pictures/none.jpg"
 image = Image.open(st.session_state.picture_path)
 
 
 
-id_value = read_data.get_person_data_ba_name(data, st.session_state.current_user)["id"]
-birthdate_value = read_data.get_person_data_ba_name(data, st.session_state.current_user)["date_of_birth"]
+
 # Bild und Personendaten nebeneinander anzeigen
 bild, personendaten = st.columns([1,2], gap="small")
 with bild:
@@ -46,13 +46,14 @@ with bild:
     st.image(image)
 with personendaten:
     st.markdown("<br><br>", unsafe_allow_html=True) # Leerer Platzhalter, um den Abstand zu vergrößern
-    st.write("Vorname: ", read_data.get_person_data_ba_name(data, st.session_state.current_user)["firstname"])
-    st.write("Nachname: ", read_data.get_person_data_ba_name(data, st.session_state.current_user)["lastname"])
-    st.markdown(f"<span style='color:white; font-size:16px;'>id: {id_value}</span>", unsafe_allow_html=True)
-    st.markdown(f"<span style='color:white; font-size:16px;'>id: {birthdate_value}</span>", unsafe_allow_html=True)
-    st.write("Geschlecht: ", read_data.get_person_data_ba_name(data, st.session_state.current_user)["gender"])
-
-
+    st.write("ID:", person.Person.find_person_data_by_name(st.session_state.current_user)["id"])
+    st.write("Vorname: ", person.Person.find_person_data_by_name(st.session_state.current_user)["firstname"])
+    st.write("Nachname: ", person.Person.find_person_data_by_name(st.session_state.current_user)["lastname"])
+    #st.markdown(f"<span style='color:white; font-size:16px;'>id: {id_value}</span>", unsafe_allow_html=True)
+    #st.markdown(f"<span style='color:white; font-size:16px;'>id: {birthdate_value}</span>", unsafe_allow_html=True)
+    st.write("Geschlecht: ", person.Person.find_person_data_by_name(st.session_state.current_user)["gender"])
+    st.write("Geburtsdatum: ", person.Person.find_person_data_by_name(st.session_state.current_user)["date_of_birth"])
+    st.write("Alter: ", person.Person.calc_age(st.session_state.current_user))
 
 
 st.write("## Leistungstest")
