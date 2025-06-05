@@ -26,8 +26,6 @@ with person_auswahl:
 
 try:
     st.session_state.picture_path = person.Person.find_person_data_by_name(st.session_state.current_user)["picture_path"]
-    if st.session_state.current_user in person_names:
-        st.session_state.picture_path = person.Person.find_person_data_by_name(st.session_state.current_user)["picture_path"]
 except:
     st.session_state.picture_path = "data/pictures/none.jpg"
 image = Image.open(st.session_state.picture_path)
