@@ -59,6 +59,10 @@ Die Streamlit App sieht nach nach der Aufgabe 4 wie folgt aus:
 
 
 ## Aufgabe 5
+### Herangehensweise
+Ziel der Aufgabe 5 war es EKG plots auszuwerten. Dazu sollte das Prinziep der Objektorientierung genutzt werden.
+
+### Beschreibung
 Es werden die EKG kurven von der Ausgewählten Person verarbeitet und als Plot dargestellt. Zusätzlich werden die peaks der R zacken durch rote Punkte angezeigt. Die HF und ihre veränderung wird als grün strichlierte Kurve im selben diagramm angezeigt.
 Die Plots werden auf der Streamlit app dargestellt.
 Wenn einer Person mehrere EKG datensätze zugeordnet sind, ist es möglich den gewollten Datensatz auszuwählen.
